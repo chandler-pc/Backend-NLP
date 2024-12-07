@@ -11,7 +11,10 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
-app.use(cors());
+app.use(cors({
+    //allow all origins
+    origin: '*',
+}));
 app.use(json());
 io.use(socketAuthMiddleware);
 
