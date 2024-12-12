@@ -12,7 +12,6 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
 app.use(cors({
-    //allow all origins
     origin: '*',
 }));
 app.use(json());
