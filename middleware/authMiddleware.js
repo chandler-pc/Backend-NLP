@@ -6,27 +6,25 @@ import jwt from 'jsonwebtoken';
  * @param {Object} req - Objeto de solicitud de Express.
  * @param {Object} res - Objeto de respuesta de Express.
  * @param {Function} next - Función que continúa con el flujo de middleware.
- * 
- * @throws {Error} Lanza un error si el token no está presente o es inválido.
  */
 const authMiddleware = (req, res, next) => {
-    const token = req.headers['authorization']; // Obtener el token del encabezado 'Authorization'
-
-    // Verificar si el token está presente
-    if (!token) {
-        return res.status(401).json({ error: 'Acceso no autorizado' });
-    }
-
     try {
-        // Extraer el token (eliminar el prefijo "Bearer ")
-        const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+        // Obtener el token de la cabecera de autorización
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+
+        // Verificar si el token está presente
+        if (!token) {
+            return res.status(401).json({ error: 'Acceso no autorizado: token ausente' });
+        }
+
+        // Verificar y decodificar el token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // Adjuntar la información del usuario decodificada al objeto `req`
         req.user = decoded;
         next(); // Continuar con el siguiente middleware o controlador
     } catch (err) {
-        // Manejar errores de token inválido
-        return res.status(401).json({ error: 'Token inválido' });
+        return res.status(500).json({ error: 'Error de autenticación' });
     }
 };
 

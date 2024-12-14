@@ -12,7 +12,10 @@ import jwt from 'jsonwebtoken';
  */
 export const socketAuthMiddleware = (socket, next) => {
     try {
-        const token = socket.handshake.auth.token; // Extraer el token del handshake de WebSocket
+        // Obtener el token de la consulta de handshake
+        const token = socket.handshake.auth.token;
+
+        console.log('Token:', token);
         if (!token) {
             throw new Error('Token no proporcionado');
         }

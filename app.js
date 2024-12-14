@@ -4,17 +4,22 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
-import {handleWebSocket} from './controllers/chatController.js';
-import {socketAuthMiddleware} from './middleware/socketAuthMiddleware.js';
+import { handleWebSocket } from './controllers/chatController.js';
+import { socketAuthMiddleware } from './middleware/socketAuthMiddleware.js';
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+const io = new Server(server, { cors: { origin: process.env.FRONTEND_URL } });
 
-app.use(cors({
-    origin: '*',
-}));
 app.use(json());
+
+const corsOptions = {
+    origin: process.env.FRONTEND_URL
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
+
 io.use(socketAuthMiddleware);
 
 app.use('/api/auth', authRoutes);
