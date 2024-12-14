@@ -14,7 +14,7 @@ const io = new Server(server, { cors: { origin: process.env.FRONTEND_URL } });
 app.use(json());
 
 const corsOptions = {
-    origin: ['https://chxn.dev/', 'https://frontend-nlp.onrender.com/'],
+    origin: ['https://chxn.dev/', 'https://frontend-nlp.onrender.com/', '216.24.57.4:443'],
 };
 
 app.use(cors(corsOptions));
